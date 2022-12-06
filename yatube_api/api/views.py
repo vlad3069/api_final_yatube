@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import permissions, viewsets
+from rest_framework import permissions, viewsets, filters
+from django_filters.rest_framework import DjangoFilterBackend
 
 from posts.models import Comment, Group, Post, Follow
 from api.ViewSet import ListCreateViewSet
@@ -48,9 +49,12 @@ class CommentViewSet(viewsets.ModelViewSet):
         serializer.save(author=author, post=post)
 
 
+
 class FollowViewSet(ListCreateViewSet):
     queryset = Follow.objects.all()
     serializer_class = FollowSerializer
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter)
+    search_fields = ('following__username',) 
 
     permission_classes = [
         permissions.IsAuthenticated, CustomerAccessPermission]
