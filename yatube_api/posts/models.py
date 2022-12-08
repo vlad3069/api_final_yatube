@@ -10,7 +10,7 @@ class Group(models.Model):
     description = models.TextField()
 
     def __str__(self):
-        return self.title
+        return f'Группа: {self.title}'
 
 
 class Post(models.Model):
@@ -29,7 +29,7 @@ class Post(models.Model):
         ordering = ('pub_date',)
 
     def __str__(self):
-        return self.text[:15]
+        return f'{[self.author, self.text[:15]]!r}'
 
 
 class Comment(models.Model):
@@ -40,6 +40,9 @@ class Comment(models.Model):
     text = models.TextField()
     created = models.DateTimeField(
         'Дата добавления', auto_now_add=True, db_index=True)
+
+    def __str__(self):
+        return self.text
 
 
 class Follow(models.Model):
