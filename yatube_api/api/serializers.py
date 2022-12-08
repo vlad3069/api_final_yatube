@@ -27,6 +27,7 @@ class CommentSerializer(serializers.ModelSerializer):
     author = serializers.SlugRelatedField(
         read_only=True, slug_field='username'
     )
+    post = serializers.ReadOnlyField(source="post_id")
 
     class Meta:
         fields = '__all__'
@@ -53,8 +54,8 @@ class FollowSerializer(serializers.ModelSerializer):
             )
         ]
 
-    def validate(self, data):
-        if data['following'] == self.context.get('request').user:
+    def validate_following(self, data):
+        if data == self.context['request'].user:
             raise serializers.ValidationError(
                 'Попытка подписаться на себя')
         return data
